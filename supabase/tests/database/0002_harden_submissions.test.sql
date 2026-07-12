@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(14);
+select plan(21);
 
 select lives_ok(
   $$
@@ -123,6 +123,35 @@ select throws_ok(
   'anonymous deletes are rejected'
 );
 reset role;
+
+select ok(
+  has_table_privilege('service_role', 'public.submission_audit_log', 'SELECT'),
+  'service_role can read audit rows'
+);
+select ok(
+  has_table_privilege('service_role', 'public.submission_audit_log', 'INSERT'),
+  'service_role can append audit rows'
+);
+select ok(
+  not has_table_privilege('service_role', 'public.submission_audit_log', 'UPDATE'),
+  'service_role cannot update audit rows'
+);
+select ok(
+  not has_table_privilege('service_role', 'public.submission_audit_log', 'DELETE'),
+  'service_role cannot delete audit rows'
+);
+select ok(
+  not has_table_privilege('service_role', 'public.submission_audit_log', 'TRUNCATE'),
+  'service_role cannot truncate the audit table'
+);
+select ok(
+  has_sequence_privilege('service_role', 'public.submission_audit_log_id_seq', 'USAGE'),
+  'service_role can allocate audit IDs'
+);
+select ok(
+  has_sequence_privilege('service_role', 'public.submission_audit_log_id_seq', 'SELECT'),
+  'service_role can read the audit sequence value'
+);
 
 select * from finish();
 

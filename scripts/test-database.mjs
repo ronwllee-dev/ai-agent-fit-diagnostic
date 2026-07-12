@@ -11,6 +11,13 @@ const migration2 = await readFile(
   new URL("../supabase/migrations/0002_harden_submissions.sql", import.meta.url),
   "utf8",
 );
+const migration3 = await readFile(
+  new URL(
+    "../supabase/migrations/0003_harden_audit_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 let assertions = 0;
 
@@ -33,6 +40,8 @@ await db.exec(`
 await db.exec(migration1);
 assertions += 1;
 await db.exec(migration2);
+assertions += 1;
+await db.exec(migration3);
 assertions += 1;
 
 const validScores = JSON.stringify({
@@ -166,6 +175,31 @@ await expectSqlState(
   "55000",
   "audit log rows cannot be updated",
 );
+
+const auditPrivileges = await db.query(`
+  select
+    has_table_privilege('service_role', 'public.submission_audit_log', 'SELECT') as can_select,
+    has_table_privilege('service_role', 'public.submission_audit_log', 'INSERT') as can_insert,
+    has_table_privilege('service_role', 'public.submission_audit_log', 'UPDATE') as can_update,
+    has_table_privilege('service_role', 'public.submission_audit_log', 'DELETE') as can_delete,
+    has_table_privilege('service_role', 'public.submission_audit_log', 'TRUNCATE') as can_truncate,
+    has_sequence_privilege('service_role', 'public.submission_audit_log_id_seq', 'USAGE') as sequence_usage,
+    has_sequence_privilege('service_role', 'public.submission_audit_log_id_seq', 'SELECT') as sequence_select
+`);
+assert.deepEqual(
+  auditPrivileges.rows[0],
+  {
+    can_select: true,
+    can_insert: true,
+    can_update: false,
+    can_delete: false,
+    can_truncate: false,
+    sequence_usage: true,
+    sequence_select: true,
+  },
+  "service_role has only the required append-only audit privileges",
+);
+assertions += 1;
 
 console.log(`Database migration checks passed: ${assertions} assertions`);
 await db.close();
