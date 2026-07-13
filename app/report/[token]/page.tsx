@@ -1,6 +1,19 @@
-import Link from "next/link";
+import { getPublicReport } from "@/lib/diagnostic/public-report";
+import { createPublicReportRepository } from "@/lib/supabase/public-report";
+import { ReportContent, ReportState } from "./report-content";
 
-export default async function ReportPlaceholder({ params }: { params: Promise<{ token: string }> }) {
+export const dynamic = "force-dynamic";
+
+export default async function ReportPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  return <main className="report-shell"><section className="report-placeholder"><span className="eyebrow">Submission saved securely</span><h1>Your AI Workforce Fit Report is ready for review.</h1><p>Phase 2 has stored your complete diagnostic and created a private report route. The full report design arrives in a later phase.</p><div className="token-box"><span>Secure report reference</span><code>{token.slice(0, 12)}…{token.slice(-8)}</code></div><Link className="secondary-link" href="/">Start another diagnostic</Link></section></main>;
+  try {
+    const result = await getPublicReport(token, createPublicReportRepository());
+    if (result.status === 200) return <ReportContent report={result.report} />;
+    if (result.error === "INVALID_TOKEN") return <ReportState title="This report link is invalid" message="Check that the complete link was copied, or start a new diagnostic." />;
+    if (result.error === "NOT_FOUND") return <ReportState title="Report not found" message="This report may no longer be available, or the link may be incorrect." />;
+    return <ReportState title="Your report is still being prepared" message="The submission was found, but the report is not complete yet. Please try again shortly." />;
+  } catch (error) {
+    console.error("Report page failed", error);
+    return <ReportState title="Report temporarily unavailable" message="We could not load the report just now. Please refresh the page in a moment." />;
+  }
 }

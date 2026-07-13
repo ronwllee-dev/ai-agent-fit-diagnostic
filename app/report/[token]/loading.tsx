@@ -1,0 +1,1 @@
+export default function ReportLoading() { return <main className="report-state"><section aria-live="polite"><div className="spinner"/><span className="eyebrow">AI Workforce Fit Report</span><h1>Loading your report…</h1><p>Retrieving your saved diagnostic and recommendations.</p></section></main>; }
