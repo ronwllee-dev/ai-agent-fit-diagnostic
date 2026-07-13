@@ -1,21 +1,3 @@
-export default function Home() {
-  return (
-    <main className="min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-xl text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">vibe-stack-supabase</h1>
-        <p className="text-neutral-500">
-          Edit{" "}
-          <code className="bg-neutral-100 px-1.5 py-0.5 rounded text-sm">
-            app/page.tsx
-          </code>{" "}
-          to start building.
-        </p>
-        <p className="text-xs text-neutral-400">
-          See{" "}
-          <code className="bg-neutral-100 px-1.5 py-0.5 rounded">CLAUDE.md</code>{" "}
-          for project conventions and gstack workflow.
-        </p>
-      </div>
-    </main>
-  );
-}
+import Link from "next/link";
+
+export default function Home() { return <main className="landing"><nav><div className="brand"><span>AI</span> Workforce Fit</div><div className="nav-note">Independent business diagnostic</div></nav><section className="hero"><div className="hero-copy"><span className="eyebrow">Clarity before automation</span><h1>Find the right <em>AI Agents</em> for your business.</h1><p>Answer ten focused questions about how your business handles enquiries, sales, customers, payments, and daily operations. Receive an instant, personalised AI Workforce Fit.</p><div className="hero-actions"><Link className="primary-button" href="/diagnostic">Start the diagnostic <span>→</span></Link><span>No login. No payment. 3–5 minutes.</span></div></div><aside className="signal-card"><div className="signal-header"><span>AI Workforce signal</span><i>Live diagnostic</i></div><div className="signal-visual"><div className="orb">8<span>roles scored</span></div><div className="orbit one"/><div className="orbit two"/></div><div className="signal-row"><span>Business process fit</span><b>Weighted</b></div><div className="signal-row"><span>Recommendations</span><b>Top 3</b></div><div className="signal-row"><span>Method</span><b>Deterministic</b></div></aside></section><section className="trust-strip"><div><strong>10</strong><span>focused questions</span></div><div><strong>8</strong><span>specialist AI Agent roles</span></div><div><strong>Instant</strong><span>personalised direction</span></div><div><strong>Private</strong><span>secure report link</span></div></section><section className="how"><span className="eyebrow">A practical starting point</span><h2>Turn operational friction into a clear sequence.</h2><div className="how-grid"><article><span>01</span><h3>Map the gaps</h3><p>Identify where opportunities, time, and visibility are being lost.</p></article><article><span>02</span><h3>Score every role</h3><p>Eight specialist agents are measured against your actual answers.</p></article><article><span>03</span><h3>Prioritise action</h3><p>See the three roles most likely to create immediate operational value.</p></article></div></section><footer><span>AI Workforce Fit</span><p>Recommendations are directional and do not guarantee business outcomes.</p></footer></main>; }

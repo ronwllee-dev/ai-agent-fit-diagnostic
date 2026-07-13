@@ -1,0 +1,5 @@
+import { emptyAnswers, type Answers } from "@/lib/diagnostic/questions";
+
+export const validAnswers: Answers = { ...structuredClone(emptyAnswers), business_type: ["professional_services_consulting"], primary_goal: ["capture_enquiries_reduce_missed_opportunities"], enquiry_sources: ["website_forms", "email"], response_speed: ["missed_completely"], qualification_process: ["basic_contact_details_only"], sales_follow_up_process: ["follow_up_inconsistent"], appointment_process: ["essential_manual_work"], main_bottlenecks: ["slow_responses_outside_hours", "leads_going_cold", "manual_appointment_booking"], time_consuming_tasks: ["replying_to_new_enquiries", "following_up_with_leads", "booking_rescheduling_appointments"], automation_readiness: ["mostly_clear_not_documented"] };
+
+export const validPayload = { idempotencyKey: "123e4567-e89b-42d3-a456-426614174000", answers: validAnswers, contact: { firstName: "Ada", lastName: "Lovelace", email: "ada@example.com", businessName: "Analytical Engines", reportProcessingConsent: true, marketingConsent: false } };
